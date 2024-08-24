@@ -7,6 +7,7 @@ dependencies = [
     "pydicom",
     "opencv-python",
     "tqdm",
+    "pandas",
 ]
 
 [build-system]

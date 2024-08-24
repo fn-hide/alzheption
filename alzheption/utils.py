@@ -1,13 +1,22 @@
 import os
 import cv2 as cv
 import numpy as np
+import pandas as pd
 from glob import glob
 from pydicom import dcmread
 from tqdm import tqdm
 
+BASEDIR = os.path.dirname(__file__)
 
-def show_dicom(dir_dicom: str):
+
+def show_dicom(dir_dicom: str) -> dict:
+    info = {
+        'n_dicom': 0,
+        'shape': None,
+    }
+    
     paths = glob(f"{dir_dicom}/*.dcm")
+    info.update({'n_dicom': len(paths)})
     
     # --- sort dicom files based on frames sequence.
     paths = sorted(paths, key=lambda x: int(x.split('_')[-3]))
@@ -32,15 +41,20 @@ def show_dicom(dir_dicom: str):
         cv.imshow('ds', img)
         if cv.waitKey(30) & 0xFF == ord('q'):
             break
+    
+    info.update({'shape': ds.pixel_array.shape})
 
     cv.destroyAllWindows()
+    
+    return info
 
 
 if __name__ == '__main__':
     # D:/Ayang/AD_AXIAL_T2_STAR/ADNI/002_S_5018/Axial_T2-Star/2012-11-08_07_53_28.0/I346239
     # show_dicom('D:/Ayang/AD_AXIAL_T2_STAR/ADNI/002_S_5018/Axial_T2-Star/2012-11-08_07_53_28.0/I346239')
     
-    for dirpath, dirnames, filenames in os.walk('D:/Ayang/AD_AXIAL_T2_STAR'):
+    list_info = []
+    for dirpath, dirnames, filenames in os.walk('D:/Ayang/dataset_alzheimer'):
         # print('Dir:', dirpath)
         # for filename in filenames:
         #     print('---------', filename)
@@ -51,8 +65,20 @@ if __name__ == '__main__':
             continue
         
         print(dirpath)
-        show_dicom(dirpath)
+
+        info = show_dicom(dirpath)
+        info.update(
+            dict(zip(('Class', 'Source', 'Subject', 'Description', 'AcgDate', 'ID'), dirpath.split('\\')[1:]))
+        )
+        list_info.append(info)
+
         print()
+        
+        # if len(list_info) == 3:
+        #     break
+        
+    df = pd.DataFrame(list_info)
+    df.to_csv(os.path.join(BASEDIR, 'result', 'show_dicom.csv'), index=False)
     
     # ds = dcmread('D:/Ayang/AD_AXIAL_T2_STAR/ADNI/006_S_4153/Axial_T2-Star/2011-08-03_08_12_01.0/I248520/ADNI_006_S_4153_MR_Axial_T2-Star__br_raw_20110803163318472_1_S117305_I248520.dcm')
     # # ds = dcmread('D:/Ayang/AD_AXIAL_T2_STAR/ADNI/002_S_5018/Axial_T2-Star/2013-11-18_10_41_00.0/I398679/ADNI_002_S_5018_MR_Axial_T2-Star__br_raw_20131118125912373_8_S206235_I398679.dcm')
