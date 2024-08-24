@@ -16,6 +16,16 @@ def show_dicom(dir_dicom: str):
         filename = path.split('\\')
         
         ds = dcmread(path)
+        if len(ds.pixel_array.shape) > 2:
+            for i in tqdm(range(ds.pixel_array.shape[0]), 'Showing dicom frames'):
+                img = cv.normalize(ds.pixel_array[i], None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
+                cv.imshow('ds', img)
+                if cv.waitKey(30) & 0xFF == ord('q'):
+                    break
+
+            cv.destroyAllWindows()
+            
+            continue
         
         # --- normalize dicom pixel array np.uint16 (0-65535) to np.uint8 (0-255) only for display dicom with opencv.
         img = cv.normalize(ds.pixel_array, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
@@ -43,5 +53,18 @@ if __name__ == '__main__':
         print(dirpath)
         show_dicom(dirpath)
         print()
+    
+    # ds = dcmread('D:/Ayang/AD_AXIAL_T2_STAR/ADNI/006_S_4153/Axial_T2-Star/2011-08-03_08_12_01.0/I248520/ADNI_006_S_4153_MR_Axial_T2-Star__br_raw_20110803163318472_1_S117305_I248520.dcm')
+    # # ds = dcmread('D:/Ayang/AD_AXIAL_T2_STAR/ADNI/002_S_5018/Axial_T2-Star/2013-11-18_10_41_00.0/I398679/ADNI_002_S_5018_MR_Axial_T2-Star__br_raw_20131118125912373_8_S206235_I398679.dcm')
+    
+    # print(ds.pixel_array.shape)
+    
+    # for i in range(ds.pixel_array.shape[0]):
+    #     img = cv.normalize(ds.pixel_array[i], None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
+    #     cv.imshow('ds', img)
+    #     if cv.waitKey(30) & 0xFF == ord('q'):
+    #         break
+
+    # cv.destroyAllWindows()
     
     pass
