@@ -9,7 +9,7 @@ from tqdm import tqdm
 BASEDIR = os.path.dirname(__file__)
 
 
-def show_dicom(dir_dicom: str, save=False) -> dict:
+def show_dicom(dir_dicom: str, dir_jpg='dataset_jpg', save=False) -> dict:
     info = {
         'n_dicom': 0,
         'shape': None,
@@ -30,7 +30,7 @@ def show_dicom(dir_dicom: str, save=False) -> dict:
             classname = classname.split('_')[0]
             idname = idname.lower()
             
-            path_idname = os.path.join(basepath, classname, idname)
+            path_idname = os.path.join(basepath, dir_jpg, classname, idname)
             os.makedirs(path_idname, exist_ok=True)
         
         ds = dcmread(path)
