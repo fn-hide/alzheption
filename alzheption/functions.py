@@ -14,8 +14,10 @@ def calculate_sharpness(image, normalize=False, max_value=1000) -> float:
     Returns:
         float: _description_
     """
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    laplacian_var = cv.Laplacian(gray, cv.CV_64F).var()
+    if len(image.shape) > 2:
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+
+    laplacian_var = cv.Laplacian(image, cv.CV_64F).var()
     
     if normalize:
         return min(laplacian_var / max_value, 1.0)
@@ -32,8 +34,10 @@ def calculate_brightness(image, normalize=False) -> float:
     Returns:
         float: _description_
     """
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    brightness = np.mean(gray)
+    if len(image.shape) > 2:
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    
+    brightness = np.mean(image)
     
     if normalize:
         return brightness / 255.0
@@ -51,8 +55,10 @@ def calculate_contrast(image, normalize=False, max_value=100) -> float:
     Returns:
         float: _description_
     """
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    contrast = gray.std()
+    if len(image.shape) > 2:
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    
+    contrast = image.std()
     
     if normalize:
         return min(contrast / max_value, 1.0)
@@ -60,8 +66,10 @@ def calculate_contrast(image, normalize=False, max_value=100) -> float:
 
 
 def calculate_unique_intensity_levels(image, normalize=False, max_levels=256):
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    unique_levels = len(np.unique(gray))
+    if len(image.shape) > 2:
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    
+    unique_levels = len(np.unique(image))
     
     if normalize:
         return unique_levels / max_levels
@@ -77,8 +85,10 @@ def calculate_shadow(image) -> float:
     Returns:
         float: _description_
     """
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    dark_area_percentage = np.sum(gray < 50) / gray.size
+    if len(image.shape) > 2:
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    
+    dark_area_percentage = np.sum(image < 50) / image.size
     
     return 1 - min(dark_area_percentage, 1.0)
 
@@ -92,8 +102,10 @@ def calculate_specularity(image) -> float:
     Returns:
         float: _description_
     """
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    bright_spots_percentage = np.sum(gray > 200) / gray.size
+    if len(image.shape) > 2:
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    
+    bright_spots_percentage = np.sum(image > 200) / image.size
     
     return 1 - min(bright_spots_percentage, 1.0)
 
@@ -107,7 +119,9 @@ def calculate_background_uniformity(image) -> float:
     Returns:
         float: _description_
     """
-    gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    background_region = gray[:int(gray.shape[0] / 4), :]  # Example region
+    if len(image.shape) > 2:
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    
+    background_region = image[:int(image.shape[0] / 4), :]  # Example region
     return 1 - min(np.std(background_region) / 255.0, 1.0)
 
