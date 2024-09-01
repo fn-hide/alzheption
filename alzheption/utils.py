@@ -80,15 +80,15 @@ def show_dicom(dir_dicom: str, dir_jpg='dataset_jpg', save=False) -> dict:
     return info
 
 
-def calculate_image_attributes(path: str) -> dict:
+def calculate_image_attributes(path: str, normalize=False) -> dict:
     img = cv.imread(path, cv.IMREAD_GRAYSCALE)
     
     return {
         'Shape': str(img.shape),
-        'Sharpness': calculate_sharpness(img),
-        'Brightness': calculate_brightness(img),
-        'Contrast': calculate_contrast(img),
-        'UIL': calculate_unique_intensity_levels(img),
+        'Sharpness': calculate_sharpness(img, normalize=normalize),
+        'Brightness': calculate_brightness(img, normalize=normalize),
+        'Contrast': calculate_contrast(img, normalize=normalize),
+        'UIL': calculate_unique_intensity_levels(img, normalize=normalize),
         'Shadow': calculate_shadow(img),
         'Specularity': calculate_specularity(img),
         'BU': calculate_background_uniformity(img),
