@@ -121,27 +121,27 @@ if __name__ == '__main__':
     # # df = pd.DataFrame(list_info)
     # # df.to_csv(os.path.join(BASEDIR, 'result', 'show_dicom.csv'), index=False)
     
-    # --- extract image (jpg) attributes
-    list_attribute = []
-    for dirpath, dirnames, filenames in os.walk('D:/Annisa/dataset_jpg'):
-        paths = glob(f"{dirpath}/*.jpg")
-        if not paths:
-            continue
+    # # --- extract image (jpg) attributes
+    # list_attribute = []
+    # for dirpath, dirnames, filenames in os.walk('D:/Annisa/dataset_jpg'):
+    #     paths = glob(f"{dirpath}/*.jpg")
+    #     if not paths:
+    #         continue
         
-        cls, idx = dirpath.split('\\')[-2:]
-        # print(dirpath, cls, idx)
+    #     cls, idx = dirpath.split('\\')[-2:]
+    #     # print(dirpath, cls, idx)
         
-        for path in tqdm(paths, desc=f"[{cls}, {idx}] Extracting"):
-            name = path.split('\\')[-1].split('.')[0]
+    #     for path in tqdm(paths, desc=f"[{cls}, {idx}] Extracting"):
+    #         name = path.split('\\')[-1].split('.')[0]
             
-            path_jpg = os.path.join(dirpath, path)
+    #         path_jpg = os.path.join(dirpath, path)
             
-            attributes = calculate_image_attributes(path_jpg)
-            attributes.update({'Class': cls, 'ID': idx, 'Name': name})
+    #         attributes = calculate_image_attributes(path_jpg)
+    #         attributes.update({'Class': cls, 'ID': idx, 'Name': name})
             
-            list_attribute.append(attributes)
+    #         list_attribute.append(attributes)
     
-    df = pd.DataFrame(list_attribute)
-    df.to_csv(os.path.join(BASEDIR, 'result', 'img_attributes.csv'), index=False)
+    # df = pd.DataFrame(list_attribute)
+    # df.to_csv(os.path.join(BASEDIR, 'result', 'img_attributes.csv'), index=False)
     
     pass
