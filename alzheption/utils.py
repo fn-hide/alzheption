@@ -144,4 +144,36 @@ if __name__ == '__main__':
     # df = pd.DataFrame(list_attribute)
     # df.to_csv(os.path.join(BASEDIR, 'result', 'img_attributes.csv'), index=False)
     
+    
+    # --- short image (jpg) by Sharpness and UIL
+    df = pd.read_csv('alzheption/result/img_attributes_normalized.csv')
+    df = df.sort_values(by=['Class', 'ID', 'Name'])
+    
+    for idx in df.ID.unique():
+        df_idx = df[df.ID == idx]
+        
+        s_sn = df_idx.iloc[0, 1]
+        s_uil = df_idx.iloc[0, 4]
+        e_sn = df_idx.iloc[-1, 1]
+        e_uil = df_idx.iloc[-1, 4]
+        
+        if s_sn < e_sn and s_uil > e_uil:
+            cls, idx = df_idx.iloc[0, -3:-1].tolist()
+            print(cls, idx)
+            
+            for e, i in enumerate(df_idx.index.tolist()[::-1]):
+                cls = df_idx.loc[i, 'Class']
+                idx = df_idx.loc[i, 'ID']
+                name = df_idx.loc[i, 'Name']
+                
+                path_jpg = os.path.join('D:', 'Annisa', 'dataset_jpg', cls, idx, f"{name}.jpg")
+                path_new = os.path.join('D:', 'Annisa', 'dataset_jpg', cls, idx, f"{e}-x.jpg")
+                
+                # img = cv.imread(path_jpg, cv.IMREAD_GRAYSCALE)
+                # cv.imshow('img', img)
+                # if cv.waitKey(10) & 0xFF == ord('q'):
+                #     break
+                
+                os.rename(path_jpg, path_new)
+            
     pass
