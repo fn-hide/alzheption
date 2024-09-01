@@ -3,11 +3,13 @@ name = "alzheption"
 version = "0.0.1"
 description = "The alzheimer classification app built in the Mathematics Thesis."
 dependencies = [
-    "flask",
-    "pydicom",
+    "Flask",
+    "matplotlib",
     "opencv-python",
-    "tqdm",
     "pandas",
+    "plotly",
+    "pydicom",
+    "tqdm",
 ]
 
 [build-system]
