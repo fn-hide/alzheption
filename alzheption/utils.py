@@ -95,6 +95,24 @@ def calculate_image_attributes(path: str, normalize=False) -> dict:
     }
 
 
+def re_sort() -> None:
+    df = pd.read_csv('alzheption/result/img_attributes_normalized.csv')
+    df = df.sort_values(by=['Class', 'ID', 'Name'])
+    
+    for cls, idx in tqdm(df[['Class', 'ID']].drop_duplicates().values, desc='Re-Sorting'):
+        name_jpg = os.listdir(os.path.join('D:', 'Annisa', 'dataset_jpg', cls, idx))[0]
+        
+        if 'x' in name_jpg:
+            df_x = df[df.ID == idx].sort_values(by=['Name'])
+            ids_x = df_x.index.tolist()
+            val_x = sorted(df_x.Name.tolist(), reverse=True)
+            df.loc[ids_x, 'Name'] = val_x
+    else:
+        df.to_csv('alzheption/result/img_attributes_normalized_resort.csv', index=False)
+    
+    return None
+
+
 if __name__ == '__main__':
     # # --- extract dicom to jpg
     # list_info = []
@@ -175,5 +193,7 @@ if __name__ == '__main__':
     #             #     break
                 
     #             os.rename(path_jpg, path_new)
+    
+    # --- re-sort goes here
     
     pass
