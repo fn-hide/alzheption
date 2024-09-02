@@ -1,4 +1,5 @@
 import os
+import shutil
 import cv2 as cv
 import numpy as np
 import pandas as pd
@@ -113,6 +114,33 @@ def re_sort() -> None:
     return None
 
 
+def pick_dataset_by_brightness(
+    path_img_attributes_data='alzheption/result/img_attributes_normalized_resort.csv',
+    feature_by='Brightness', 
+    ascending=True,
+    base_path='D:/Annisa', 
+    src_dir='dataset_jpg', 
+    dst_dir='dataset_jpg_picked'
+) -> None:
+    df = pd.read_csv(path_img_attributes_data)
+    df = df.sort_values(by=['Class', 'ID', feature_by], ascending=ascending)
+    df = df.groupby('ID').tail()
+    
+    src_dir = os.path.join(base_path, src_dir)
+    dst_dir = os.path.join(base_path, dst_dir)
+    for cls, idx, name in tqdm(df[['Class', 'ID', 'Name']].values, desc='Building dataset'):
+        path = os.path.join(src_dir, cls, idx, f"{name}.jpg")
+        if not os.path.exists(path):
+            path = os.path.join(src_dir, cls, idx, f"{name}-x.jpg")
+        
+        dst_dir_idx = os.path.join(dst_dir, cls, idx)
+        os.makedirs(dst_dir_idx, exist_ok=True)
+        
+        path_idx = os.path.join(dst_dir_idx, f"{name}.jpg")
+        
+        shutil.copy(path, path_idx)
+
+
 if __name__ == '__main__':
     # # --- extract dicom to jpg
     # list_info = []
@@ -195,5 +223,17 @@ if __name__ == '__main__':
     #             os.rename(path_jpg, path_new)
     
     # --- re-sort goes here
+    
+    # --- pick dataset by brightness
+    # pick_dataset_by_brightness(feature_by='Brightness', ascending=True, dst_dir='dataset_jpg_brightness')
+    # pick_dataset_by_brightness(feature_by='BU', ascending=False, dst_dir='dataset_jpg_bu')
+    
+    # # analyze above: maybe we can use BU
+    # # update: based on BU, some images return no object
+    # df = pd.read_csv('alzheption/result/img_attributes_normalized_resort.csv')
+    # df = df.sort_values(by=['Class', 'ID', 'Name'])
+    # print(df[df.ID == 'i306070'].sort_values(by=['Brightness']).tail())
+    
+    # print(df[df.ID == 'i306070'].sort_values(by=['BU']).head())
     
     pass
