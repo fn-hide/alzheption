@@ -114,6 +114,29 @@ def re_sort() -> None:
     return None
 
 
+def pick_dataset_by_sort(src_path: str, dst_path, k=5) -> None:
+    os.makedirs(dst_path, exist_ok=True)
+    
+    i = 0
+    for dirpath, dirnames, filenames in os.walk('D:/Annisa/dataset_jpg'):
+        paths = glob(f"{dirpath}/*.jpg")
+        s_idx = int((16/44)*len(paths))
+        paths = sorted(paths, key=lambda x: int(os.path.split(x)[-1].split('.')[0].split('-')[0]))[s_idx:s_idx + 5]
+        
+        if not paths:
+            continue
+        
+        for path in tqdm(paths, desc='Copying...'):
+            path_new = path.replace(src_path, dst_path)
+            
+            directory = os.path.split(path_new)[0]
+            os.makedirs(directory, exist_ok=True)
+            
+            shutil.copy(path, path_new)
+        
+        i += 1
+
+
 def pick_dataset_by_brightness(
     path_img_attributes_data='alzheption/result/img_attributes_normalized_resort.csv',
     feature_by='Brightness', 
