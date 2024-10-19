@@ -4,6 +4,7 @@ Alzheimer classification using Inception-V3 towards 6 classess.
 
 ## 🎯 TODOs
 
+- [ ] Prepare LaTeX
 - [ ] Train Alzheption
 - [x] Create dataset on kaggle
 - [x] Pick 5 images per subject
