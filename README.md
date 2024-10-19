@@ -15,3 +15,4 @@ Alzheimer classification using Inception-V3 towards 6 classess.
 ## 📖 Documentation
 
 - [Notebook](https://www.kaggle.com/code/hudafn/alzheption)
+- [Dataset](https://www.kaggle.com/datasets/hudafn/alzheption-dataset)
