@@ -1,6 +1,6 @@
 # Alzheption
 
-Alzheimer classification using Inception-V3 towards 6 classess.
+Alzheimer classification using Inception-V3 towards 6 classess. Repair BibTeX with [Flaming Tempura](https://flamingtempura.github.io/)
 
 ## 🎯 TODOs
 
