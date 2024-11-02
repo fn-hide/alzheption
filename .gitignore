@@ -1,1 +1,11 @@
 .*/
+__pycache__/
+alzheption/tex/*
+!alzheption/tex/chapter1.tex
+!alzheption/tex/chapter2.tex
+!alzheption/tex/chapter3.tex
+!alzheption/tex/chapter4.tex
+!alzheption/tex/chapter5.tex
+!alzheption/tex/main.tex
+!alzheption/tex/main.cls
+!alzheption/tex/references.bib
