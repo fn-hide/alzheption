@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "kornia>=0.7.4",
     "opencv-python>=4.10.0.84",
     "pydicom>=3.0.1",
 ]
