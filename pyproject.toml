@@ -1,17 +1,10 @@
 [project]
 name = "alzheption"
-version = "0.0.1"
-description = "The alzheimer classification app built in the Mathematics Thesis."
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
 dependencies = [
-    "Flask",
-    "matplotlib",
-    "opencv-python",
-    "pandas",
-    "plotly",
-    "pydicom",
-    "tqdm",
+    "opencv-python>=4.10.0.84",
+    "pydicom>=3.0.1",
 ]
-
-[build-system]
-requires = ["flit_core<4"]
-build-backend = "flit_core.buildapi"
