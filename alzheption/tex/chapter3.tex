@@ -1,0 +1,66 @@
+\chapter{METODE PENELITIAN}
+
+\section{Jenis Penelitian}
+Penelitian ini melakukan deteksi objek pada data citra dermoskopi menggunakan metode YOLOv7. Berdasarkan hal tersebut, penelitian ini data numerik yang terdiri dari matriks dan nilai intensitas piksel sehingga penelitian ini termasuk ke dalam penelitian kuantitatif. Maka dari itu, pada penelitian ini terdapat perhitungan dan analisis terkait dengan data dan metode yang digunakan untuk mendeteksi kanker kulit pada citra dermoskopi.
+
+\section{Jenis dan Sumber Data}
+Penelitian ini menggunakan dataset yang berasal dari \textit{ISIC 2019 Challenge}. \textit{International Skin Imaging Collaboration} merupakan organisasi internasional untuk meningkatkan upaya diagnosis kanker kulit melanoma. Salah satu usahanya adalah menghimpun data citra dermoskopi dari berbagai pusat klinis internasional. Dataset \textit{ISIC 2019 Challenge} memiliki 8 jenis kanker kulit, yaitu \textit{Actinic Keratosis}, \textit{Melanoma}, \textit{Squamous Cell Carcinoma}, \textit{Basal Cell Carcinoma}, \textit{Nevus}, \textit{Dermatofibroma}, \textit{Benign Keratosis Lesion}, dan \textit{Vascular Lesion}. Terdapat 25,331 data citra kanker kulit dengan 8 kelas pada dataset ISIC 2019, akan tetapi dengan mempertimbangkan perangkat yang digunakan untuk pembentukan model, penelitian ini menggunakan 200 citra pada tiap kelas sehingga terdapat 1600 data citra yang digunakan pada penelitian ini untuk pembentukan model. Sampel citra masing-masing jenis kanker kulit seperti terlihat pada Gambar \ref{fig:dataset}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{cccc}
+        \includegraphics[width=2cm]{img/bab3/ak.png}
+        &
+        \includegraphics[width=2cm]{img/bab3/bcc.png}
+        &
+        \includegraphics[width=2cm]{img/bab3/bkl.png}
+        &
+        \includegraphics[width=2cm]{img/bab3/df.png}\\
+        (a) &(b) &(c) &(d)\\
+        \  &\  &\  &\ \\
+        \includegraphics[width=2cm]{img/bab3/mel.png}
+        &
+        \includegraphics[width=2cm]{img/bab3/nv.png}
+        &
+        \includegraphics[width=2cm]{img/bab3/scc.png}
+        &
+        \includegraphics[width=2cm]{img/bab3/vasc.png}\\
+        (e) &(f) &(g) &(h)\\
+    \end{tabular}
+    \caption{Dataset citra dermoskopi kanker kulit (a) AK; (b) BCC; (c) BKL; (d) DF; (e) MEL; (f) NV; (g) SCC; (h) VASC;}
+    \label{fig:dataset}
+\end{figure}
+
+\section{Kerangka Penelitian}
+Tahapan dalam melakukan deteksi kanker kulit berdasarkan citra dermoskopi menggunakan YOLOv7 pada penelitian ini seperti terlihat pada Gambar \ref{fig:flowchart}.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=13cm]{img/bab3/flowchart.png}
+        \caption{Diagram alir pada penelitian ini}
+        \label{fig:flowchart}
+    \end{center}
+\end{figure}
+
+Penelitian ini terdiri dari beberapa proses sebagai berikut:
+\begin{enumerate}
+    \item Tahap \textit{pre-processing} terdiri dari \textit{resize} dan \textit{annotation}. \textit{Resize} merupakan pengubahan ukuran piksel pada sebuah citra, sehingga penelitian ini melakukan \textit{resize} citra masukan menjadi ukuran $640\times 640$. Rumus \textit{resize} seperti terlihat pada \ref{eq:resize}. \textit{Annotation} merupakan pemberian kotak pembatas sebuah objek pada sebuah citra. Hal ini dilakukan satu per satu sesuai dengan label yang diberikan dari penyedia dataset, yaitu \textit{ISIC 2019 Challenge}. Proses \textit{resize} dan \textit{annotation} seperti terlihat pada Gambar \ref{fig:preprocessing}.
+    \begin{figure}[H]
+        \centering
+        \begin{tabular}{ccc}
+            \includegraphics[width=2cm]{img/bab2/dermoscopy.jpg}
+            &
+            \includegraphics[width=2cm]{img/bab3/annotation.png}
+            &
+            \includegraphics[width=1.5cm]{img/bab3/annotation.png}\\
+            (a) &(b) &(c)\\
+        \end{tabular}
+        \caption{Tahap \textit{pre-processing} (a) Citra asli; (b) Citra setelah menerapkan \textit{annotation}; (c) Citra setelah menerapkan \textit{resize}}
+        \label{fig:preprocessing}
+    \end{figure}
+
+    \item \textit{Data splitting} merupakan tahap pembagian data. Penelitian ini membagi data menjadi tiga bagian, yaitu $70\%$ data untuk proses pelatihan dinamakan \textit{train data}, $20\%$ data untuk proses validasi dinamakan \textit{validation data}, dan $10\%$ data untuk proses pengujian dinamakan \textit{test data}. \textit{Train data} digunakan untuk mendapatkan model ketika proses pelatihan model. Kemudian, model yang dihasilkan diuji menggunakan \textit{validation data} pada setiap \textit{epochs} hingga mendapatkan nilai mAP yang tinggi. Pada akhirnya, model dengan mAP tertinggi berdasarkan \textit{validation data} dilakukan pengujian kembali menggunakan \textit{test data}. Hal ini bertujuan untuk menghindari model yang \textit{overfitting} maupun \textit{underfitting}. \textit{Overfitting} merupakan kondisi dimana model mempelajari \textit{train data} dengan sangat baik, namun tidak dengan data baru. Sedangkan, \textit{underfitting} merupakan kondisi dimana model belum optimal dalam mempelajari data.
+    \item Proses pembentukan model YOLOv7 dan YOLOv7 Tiny berdasarkan uji coba \textit{hyperparameter}. Terdapat dua \textit{hyperparameter} yang dilakukan uji coba pada penelitian ini, yaitu \textit{batch size} dan \textit{epochs}. Nilai uji coba \textit{batch size} pada penelitian ini adalah $32$, $64$, dan $128$. Sedangkan, nilai uji coba \textit{epochs} pada penelitian ini adalah $300$, $600$, dan $1200$. Proses pembentukan model menggunakan Persamaan \ref{eq:conv-layer} hingga \ref{eq:silu}.
+    \item Proses pengujian model yaitu tahap untuk mengetahui tingkat keberhasilan model menggunakan \textit{test data} untuk mendapatkan hasil evaluasi.
+    \item Proses evaluasi menggunakan mAP sehingga dilakukan perhitungan mAP berdasarkan Persamaan \ref{eq:xa1} hingga \ref{eq:map} untuk mendapatkan nilai IoU dengan \textit{threshold} 0.65 serta mendapatkan nilai \textit{precision}, \textit{recall}, dan mAP.
+\end{enumerate}

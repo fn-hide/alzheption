@@ -1,0 +1,19 @@
+
+\chapter{PENUTUP}
+
+\section{Kesimpulan}
+
+Hasil penelitian klasifikasi jenis kanker kulit berdasarkan citra dermoskopi menggunakan metode YOLOv7 memberikan beberapa kesimpulan yang dapat diambil dari percobaan yang telah dilakukan, yaitu:
+
+\begin{enumerate}
+    \item Hasil optimal klasifikasi jenis kanker kulit menggunakan YOLO berdasarkan citra dermoskopi dihasilkan oleh jenis model YOLOv7 Tiny dengan 128 \textit{batch size} dan 600 \textit{epochs}. Model tersebut menghasilkan nilai \textit{precision} sebesar $82.3\%$, nilai \textit{recall} sebesar $78.2\%$, dan nilai mAP sebesar $83.2\%$. YOLOv7 Tiny dapat mengklasifikasikan jenis kanker kulit MEL, NV, dan VASC dengan baik. Hal ini dapat dilihat dari nilai \textit{precision}, \textit{recall}, dan \textit{mAP} per kelas. Kelas MEL memiliki nilai \textit{precision} sebesar $78.6\%$, nilai \textit{recall} sebesar $82.6\%$, dan nilai mAP sebesar $84.7\%$. Kelas NV memiliki nilai \textit{precision} sebesar $79.3\%$, nilai \textit{recall} sebesar $92.5\%$, dan nilai mAP sebesar $96.9\%$. Kelas VASC memiliki nilai \textit{precision} sebesar $88.8\%$, nilai \textit{recall} sebesar $95.0\%$, dan nilai mAP sebesar $93.0\%$. Pada penelitian ini, model optimal yang dihasilkan oleh YOLOv7 Tiny dapat melakukan klasifikasi jenis kanker kulit dengan baik jika dilihat dari nilai \textit{precision}, \textit{recall}, dan mAP.
+    \item Hasil perbedaan model YOLO berdasarkan uji coba \textit{hyperparameter} memiliki perbedaan yang signifikan dengan YOLOv7 Tiny sebagai model terbaik. Nilai mAP YOLOv7 mengalami kenaikan seiring dengan semakin besarnya nilai \textit{epochs}. Namun, hal ini menghabiskan waktu komputasi yang cukup lama. Nilai mAP terbaik yang dihasilkan model YOLOv7 adalah $77.8\%$ dengan waktu komputasi 11.755 jam. YOLOv7 Tiny memiliki nilai mAP yang stabil pada nilai \textit{batch size} sebesar 128. Nilai mAP terbaik pada model YOLOv7 Tiny didapatkan dengan waktu komputasi 3.235 jam dengan selisih 8.520 jam lebih cepat daripada YOLOv7. Pada penelitian ini, YOLOv7 Tiny dapat memberikan performa yang lebih baik daripada YOLOv7 dari segi mAP dan waktu komputasi.
+\end{enumerate}
+
+\section{Saran}
+
+Penelitian klasifikasi jenis kanker kulit berdasarkan citra dermoskopi menggunakan metode YOLOv7 ini memiliki banyak sekali kekurangan yang perlu diperbaiki sehingga meningkatkan efisiensi model deteksi objek. Beberapa hal yang diharapkan terkait penelitian berikutnya yaitu:
+\begin{enumerate}
+    \item Penelitian ini menggunakan sumber daya \textit{open source} yang berasal dari \textit{kaggle} sehingga penelitian ini memiliki batasan terkait tingkat \textit{feature learning} pada metode YOLOv7. Berdasarkan hal tersebut, sumber daya dengan kapasitas yang besar sangat diperlukan untuk memaksimalkan kinerja metode YOLOv7. Hal ini diperlukan untuk meningkatkan nilai \textit{epochs} agar model dapat mempelajari data dengan lebih baik. Penelitian selanjutnya diharapkan dapat memiliki sumber daya yang besar sehingga meningkatkan jumlah uji coba dan memaksimalkan kinerja YOLOv7.
+    \item Data kanker kulit pada penelitian ini tidak menggunakan proses augmentasi data maupun peningkatan kualitas citra untuk membantu proses klasifikasi jenis kanker kulit. Salah satu masalah dalam metode YOLO adalah kurangnya jumlah data yang dapat digunakan dalam proses pelatihan model.
+\end{enumerate}
