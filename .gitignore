@@ -9,3 +9,5 @@ alzheption/tex/*
 !alzheption/tex/main.tex
 !alzheption/tex/main.cls
 !alzheption/tex/references.bib
+
+lib/
