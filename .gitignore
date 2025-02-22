@@ -12,3 +12,4 @@ alzheption/tex/*
 
 lib/
 alzheption.egg-info/
+*.pkl
