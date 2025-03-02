@@ -2,15 +2,18 @@ import os
 import torch
 import pickle
 import numpy as np
+import pandas as pd
 import torchvision as tv
 from PIL import Image
-
 
 
 class AlzheptionExtractor():
     def __init__(
             self,
-            path_dataset: str, test_size: float, train_transform: tv.transforms.Compose, test_transform: tv.transforms.Compose,
+            path_dataset: str, 
+            test_size: float, 
+            train_transform: tv.transforms.Compose, 
+            test_transform: tv.transforms.Compose,
             batch_size=256,
         ):
         self.path_dataset = path_dataset
@@ -37,6 +40,8 @@ class AlzheptionExtractor():
         return self.train_features, self.test_features
 
     def save_extractor(self, dir_path=".") -> None:
+        self._model.to(torch.device("cpu"))
+
         if os.path.exists(dir_path) is False:
             print(f"Destination path doesn't exists. Creating new dirs: {dir_path}")
             os.makedirs(dir_path)
@@ -45,9 +50,17 @@ class AlzheptionExtractor():
             pickle.dump(self, f)
 
     @classmethod
-    def load_extractor(cls, filepath="./AlzheptionExtractor.pkl") -> "AlzheptionExtractor":
+    def load_extractor(cls, filepath="./AlzheptionExtractor.pkl", path_dataset_new: str | None = None) -> "AlzheptionExtractor":
         with open(filepath, "rb") as f:
-            return pickle.load(f)
+            obj: AlzheptionExtractor = pickle.load(f)
+        
+        if not os.path.exists(obj.path_dataset):
+            obj._dataset = None
+        
+        if isinstance(path_dataset_new, str):
+            obj.path_dataset = path_dataset_new
+        
+        return obj
 
     def show_dataset_count(self) -> None:
         """Show dataset count"""
@@ -234,3 +247,34 @@ class AlzheptionExtractor():
         np.savez(f"{dst_path}/TrainLabels_{preprocess_train_name}.npz", TrainLabels=self.train_labels)
         np.savez(f"{dst_path}/TestFeatures_{preprocess_test_name}.npz", TestFeatures=self.test_features)
         np.savez(f"{dst_path}/TestLabels_{preprocess_test_name}.npz", TestLabels=self.test_labels)
+    
+    def view_train_label_distribution(self):
+        return self._view_label_distribution()
+    
+    def view_test_label_distribution(self):
+        return self._view_label_distribution(is_train=False)
+    
+    def _view_label_distribution(self, is_train=True) -> pd.DataFrame:
+        data = self.train_labels if is_train else self.test_labels
+        df = pd.DataFrame(np.unique(data, return_counts=True)).transpose()
+        df.columns = ["label", "count"]
+        
+        return df
+    
+    def balance_feature(self) -> None:
+        self._train_features, self._train_labels = self._balance_feature()
+        self._test_features, self._test_labels = self._balance_feature(subset="test")
+    
+    def _balance_feature(self, subset="train") -> tuple[np.ndarray, list[int]]:
+        if subset not in ("train", "test"):
+            raise ValueError("Subset must be in ('train', 'test')")
+        
+        df = eval(f"self.view_{subset}_label_distribution()")
+        feature = eval(f"self.{subset}_features")
+        label = eval(f"self.{subset}_labels")
+        
+        minval = df.sort_values(by=["count"]).head(1)["count"].item()
+        df = pd.DataFrame({"label": label}).groupby("label").head(minval)
+        index = df.index.tolist()
+
+        return feature[index], np.array(label)[index]

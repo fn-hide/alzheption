@@ -1,5 +1,5 @@
 import numpy as np
-from alzheption.lib.TfELM.Models.KELMModel import KELMModel
+from TfELM.Models.KELMModel import KELMModel
 
 from alzheption.src.alzheption.extractor import AlzheptionExtractor
 
@@ -9,7 +9,9 @@ class AlzheptionClassificator:
     def __init__(
             self,
             extractor: AlzheptionExtractor,
-            n_neurons=512, n_splits=10, n_repeats=10,
+            n_neurons=512, 
+            n_splits=10, 
+            n_repeats=10,
         ):
         self.extractor = extractor
         self.n_neurons = n_neurons
