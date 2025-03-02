@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import torchvision as tv
 from PIL import Image
+from tqdm import tqdm
 
 
 class AlzheptionExtractor():
@@ -39,14 +40,14 @@ class AlzheptionExtractor():
     def __call__(self) -> tuple[np.ndarray, np.ndarray]:
         return self.train_features, self.test_features
 
-    def save_extractor(self, dir_path=".") -> None:
+    def save_extractor(self, dir_path=".", suffix: str | None = None) -> None:
         self._model.to(torch.device("cpu"))
 
         if os.path.exists(dir_path) is False:
             print(f"Destination path doesn't exists. Creating new dirs: {dir_path}")
             os.makedirs(dir_path)
 
-        with open(f"{dir_path}/AlzheptionExtractor.pkl", "wb") as f:
+        with open(f"{dir_path}/AlzheptionExtractor{suffix}.pkl", "wb") as f:
             pickle.dump(self, f)
 
     @classmethod
@@ -226,7 +227,7 @@ class AlzheptionExtractor():
         self.model.eval()
         features, labels = [], []
         with torch.no_grad():
-            for images, label in data_loader:
+            for images, label in tqdm(data_loader, desc=f"Extracting '{part}'"):
                 images = images.to(self.device)
                 output = self.model(images)
                 features.append(output.cpu().numpy())
