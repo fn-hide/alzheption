@@ -1,20 +1,24 @@
 import numpy as np
+import pandas as pd
 from TfELM.Models.KELMModel import KELMModel
+from tqdm import tqdm
+from sklearn.metrics import accuracy_score
+from sklearn.decomposition import PCA
 
-from alzheption.src.alzheption.extractor import AlzheptionExtractor
-
+from alzheption.extractor import AlzheptionExtractor
+from alzheption.utils import custom_cross_val_score
 
 
 class AlzheptionClassificator:
     def __init__(
             self,
             extractor: AlzheptionExtractor,
-            n_neurons=512, 
+            hyperparameter: list[dict],
             n_splits=10, 
             n_repeats=10,
         ):
         self.extractor = extractor
-        self.n_neurons = n_neurons
+        self.hyperparameter = hyperparameter
         self.n_splits = n_splits
         self.n_repeats = n_repeats
 
@@ -24,7 +28,7 @@ class AlzheptionClassificator:
         self._y_test: np.ndarray | None = None
         self._x: np.ndarray | None = None
         self._y: np.ndarray | None = None
-        self._model: KELMModel | None = None
+        self._df_evaluation: pd.DataFrame | None = None
 
     @property
     def x_train(self) -> np.ndarray:
@@ -61,3 +65,40 @@ class AlzheptionClassificator:
         if self._y is None:
             self._y = np.concatenate((self.y_train, self.y_test), axis=0)
         return self._y
+
+    @property
+    def df_evaluation(self) -> pd.DataFrame:
+        if self._df_evaluation is None:
+            self.evaluate_with_cross_validation()
+        return self._df_evaluation
+    
+    def evaluate_with_cross_validation(self, n_components: int | None = None):
+        if n_components is None:
+            n_components = min(self.x.shape)
+        
+        pca = PCA(n_components=n_components)
+        x = pca.fit_transform(self.x)
+
+        # Cross-validation for KELM
+        data = []
+        max_score = 0
+        for param in tqdm(self.hyperparameter, desc="Evaluation"):
+            scores = custom_cross_val_score(
+                model=param.get("model"), 
+                X=x, 
+                y=self.y, 
+                n_splits=self.n_splits, 
+                n_repeats=self.n_repeats, 
+                scoring=accuracy_score, 
+            )
+            score = np.mean(scores)
+            data.append({
+                **{key: val for key, val in param.items() if isinstance(val, (str, int, float))},
+                "score_list": scores,
+                "score_mean": score,
+            })
+            if max_score < score:
+                max_score = score
+        
+        self._df_evaluation = pd.DataFrame(data)
+        return data
