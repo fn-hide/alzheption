@@ -1,6 +1,8 @@
+import os
+import torch
+import pickle
 import numpy as np
 import pandas as pd
-from TfELM.Models.KELMModel import KELMModel
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score
 from sklearn.decomposition import PCA
@@ -29,6 +31,23 @@ class AlzheptionClassificator:
         self._x: np.ndarray | None = None
         self._y: np.ndarray | None = None
         self._df_evaluation: pd.DataFrame | None = None
+    
+    def save_classificator(self, dir_path=".", suffix: str | None = None) -> None:
+        self._model.to(torch.device("cpu"))
+
+        if os.path.exists(dir_path) is False:
+            print(f"Destination path doesn't exists. Creating new dirs: {dir_path}")
+            os.makedirs(dir_path)
+
+        with open(f"{dir_path}/AlzheptionClassificator{suffix}.pkl", "wb") as f:
+            pickle.dump(self, f)
+
+    @classmethod
+    def load_classificator(cls, filepath="./AlzheptionClassificator.pkl") -> "AlzheptionClassificator":
+        with open(filepath, "rb") as f:
+            obj: AlzheptionClassificator = pickle.load(f)
+        
+        return obj
 
     @property
     def x_train(self) -> np.ndarray:
