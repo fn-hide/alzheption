@@ -51,27 +51,19 @@ class AlzheptionClassificator:
 
     @property
     def x_train(self) -> np.ndarray:
-        if self._x_train is None:
-            self._x_train = self.extractor.train_features
-        return self._x_train
+        return self.extractor.train_features
 
     @property
     def x_test(self) -> np.ndarray:
-        if self._x_test is None:
-            self._x_test = self.extractor.test_features
-        return self._x_test
+        return self.extractor.test_features
 
     @property
     def y_train(self) -> np.ndarray:
-        if self._y_train is None:
-            self._y_train = self.extractor.train_labels
-        return self._y_train
+        return self.extractor.train_labels
 
     @property
     def y_test(self) -> np.ndarray:
-        if self._y_test is None:
-            self._y_test = self.extractor.test_labels
-        return self._y_test
+        return self.extractor.test_labels
 
     @property
     def x(self) -> np.ndarray:

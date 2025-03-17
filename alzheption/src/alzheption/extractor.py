@@ -180,7 +180,35 @@ class AlzheptionExtractor():
         """Load pre-trained InceptionV3 model and set as feature extractor"""
         model = tv.models.inception_v3(weights=True)
         model.aux_logits = False
+        
         model.fc = torch.nn.Identity()
+        
+        # # Ambil fitur sebelum FC (dari GAP layer)
+        # model.fc = torch.nn.Sequential(
+        #     torch.nn.AdaptiveAvgPool2d((1, 1)),  # Global Average Pooling
+        #     torch.nn.Flatten()  # Flatten agar bisa digunakan oleh KELM
+        # )
+        
+        # model = torch.nn.Sequential(
+        #     model.Conv2d_1a_3x3,
+        #     model.Conv2d_2a_3x3,
+        #     model.Conv2d_2b_3x3,
+        #     model.maxpool1,
+        #     model.Conv2d_3b_1x1,
+        #     model.Conv2d_4a_3x3,
+        #     model.maxpool2,
+        #     model.Mixed_5b,
+        #     model.Mixed_5c,
+        #     model.Mixed_5d,
+        #     model.Mixed_6a,
+        #     model.Mixed_6b,
+        #     model.Mixed_6c,
+        #     model.Mixed_6d,
+        #     model.Mixed_6e,
+        #     model.Mixed_7a,
+        #     model.Mixed_7b,
+        #     model.Mixed_7c  # Ambil fitur dari sini
+        # )
 
         # Move to GPU if available and use DataParallel
         if torch.cuda.device_count() > 1:
