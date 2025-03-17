@@ -4,8 +4,6 @@ Alzheimer classification using Inception-V3 towards 6 classess. Repair BibTeX wi
 
 ## 🎯 TODOs
 
-- [ ] Prepare LaTeX
-- [ ] Train Alzheption
 - [x] Create dataset on kaggle
 - [x] Pick 5 images per subject
 - [x] Sort images in each subject to specific order
@@ -16,3 +14,8 @@ Alzheimer classification using Inception-V3 towards 6 classess. Repair BibTeX wi
 
 - [Notebook](https://www.kaggle.com/code/hudafn/alzheption)
 - [Dataset](https://www.kaggle.com/datasets/hudafn/alzheption-dataset)
+
+## Question
+
+1. CV accuracy hit 85% when add hflip augmentation with original transformation. But, its decrease when use hflip and rotate augmentation. Is rotate decrease the accuracy? or we need more neurons while we increase the augmentation?
+    a. Accuracy has linear relation with increase of neurons, but it's very small.
