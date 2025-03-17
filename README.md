@@ -19,3 +19,4 @@ Alzheimer classification using Inception-V3 towards 6 classess. Repair BibTeX wi
 
 1. CV accuracy hit 85% when add hflip augmentation with original transformation. But, its decrease when use hflip and rotate augmentation. Is rotate decrease the accuracy? or we need more neurons while we increase the augmentation?
     a. Accuracy has linear relation with increase of neurons, but it's very small.
+2. After we add new augmentation again (increase the dataset count also) then accuracy was decrease.
