@@ -13,3 +13,4 @@ asset/
 lib/
 alzheption.egg-info/
 *.pkl
+*.rar
